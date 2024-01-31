@@ -10,8 +10,14 @@ function App() {
   const [selectedRequest, setSelectedRequest] = useState({})
 
   useEffect(() => {
+    if (localStorage.userEndpoints) {
+      setEndpoints(localStorage.userEndpoints)
+    }
+  }, [])
+  
+  useEffect(() => {
     axios
-      .get("http://localhost:3000/requests")
+      .get("http://localhost:3000/requests") // Will change this to /api/:hash
       .then(response => {
         setRequests(response.data)
       }).catch(err => {
@@ -21,7 +27,7 @@ function App() {
 
   const handleSidebarClick = (e, sidebarRequest) => {
     axios
-      .get(`http://localhost:3000/requestData/${sidebarRequest.id}`)
+      .get(`http://localhost:3000/requestData/${sidebarRequest.id}`) // Will change this to /api/:hash/sidebarRequest.id
       .then(response => {
         const reqInfo = Object.assign({}, response.data, sidebarRequest)
         setSelectedRequest(reqInfo)

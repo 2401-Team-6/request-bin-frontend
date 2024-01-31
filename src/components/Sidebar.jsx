@@ -1,12 +1,11 @@
 const SidebarRequest = ({ request, handleClick }) => {
 
   const clickHandler = (event) => {
-    console.log(request)
-    return () => handleClick(event, request)
+    handleClick(event, request)
   }
 
   return (  
-    <tr onClick={clickHandler()}>
+    <tr onClick={clickHandler}>
       <td>
         {request.timestamp}
       </td>
