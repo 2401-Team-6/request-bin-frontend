@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import Sidebar from "./components/Sidebar"
 import RequestContent from "./components/RequestContent"
 import EndpointDropdown from './components/EndpointDropdown'
-import CreateEndpointButton from './components/CreateEndpointButton'
+import HeaderButton from './components/HeaderButton'
 import axios from "axios"
 
 function App() {
@@ -77,17 +77,23 @@ function App() {
         console.log(err.message)
       })
   }
+
+  const handleCopyClick = (e, text) => {
+    console.log("fired")
+    navigator.clipboard.writeText(text)
+  }
  
   return (
     <>
       <header>
         <label htmlFor="hash">ourrequestbinsite.com/</label>
         <EndpointDropdown endpoints={endpoints} selectedEP={selectedEP} onSubmit={handleEndpointSubmit}/>
-        <CreateEndpointButton onClick={handleNewEndpointClick}/>
+        <HeaderButton onClick={(e) => handleCopyClick(e, document.getElementById("hash-dropdown").value)} src="./assets/img/copy_icon.png" />
+        <HeaderButton onClick={handleNewEndpointClick} src="./assets/img/plus_icon.png" />
       </header>
       <main>
         <Sidebar requests={requests} handleSidebarClick={handleSidebarClick}/>
-        <RequestContent selectedRequest={selectedRequest}/>
+        <RequestContent selectedRequest={selectedRequest} copyClick={handleCopyClick}/>
       </main>
   </>
   )

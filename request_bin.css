@@ -274,7 +274,7 @@ li > div {
   cursor: pointer;
 }
 
-#new-endpoint, #copy-endpoint {
+.header-button {
   position: relative;
   top: 0.2rem;
   height: 1.5rem;

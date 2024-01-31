@@ -1,10 +1,14 @@
-const Headers = ({ headers }) => (
+const CopyButton = ({ onClick }) => {
+  return <img className="copy-data actionable" src="./assets/img/copy_icon.png" onClick={onClick}/>
+}
+
+const Headers = ({ headers, copyClick }) => (
   <li id="headers-row">
     <h1 className="request-list-header">Headers</h1>
     <img className="request-content-collapse actionable" src="./assets/img/arrow_icon.png" />
     <div className="collapsible">
       <div id="request-headers">
-      <img className="copy-data actionable" src="./assets/img/copy_icon.png" />
+      <CopyButton onClick={(e) => copyClick(e, JSON.stringify(headers))}/>
       <table>
         <tbody>
         {
@@ -28,12 +32,12 @@ const Headers = ({ headers }) => (
   </li>
 )
 
-const RequestBody = ({ body }) => (
+const RequestBody = ({ body, copyClick }) => (
   <li id="body-row">
     <h1 className="request-list-header">Body</h1>
     <img className="request-content-collapse actionable" src="./assets/img/arrow_icon.png" />
     <div className="collapsible">
-      <img className="copy-data actionable" src="./assets/img/copy_icon.png" />
+      <CopyButton onClick={(e) => copyClick(e, JSON.stringify(body))}/>
       <pre id="request-body">
 <input type="radio" id="raw" name="json-display-type" value="raw" checked /><label htmlFor="raw">RAW</label><input type="radio" id="pretty" name="json-display-type" value="pretty" /><label htmlFor="pretty">PRETTY</label><input type="radio" id="structured" name="json-display-type" value="structured" /><label htmlFor="structured">STRUCTURED</label>
 {JSON.stringify(body)}</pre>
@@ -41,7 +45,7 @@ const RequestBody = ({ body }) => (
   </li>
 )
 
-const RequestContent = ({ selectedRequest }) => {
+const RequestContent = ({ selectedRequest, copyClick }) => {
   if (Object.keys(selectedRequest).length == 0) {
     return (<></>)
   }
@@ -59,8 +63,8 @@ const RequestContent = ({ selectedRequest }) => {
         <span className={selectedRequest.method.toLowerCase()} id="request-list-method">{selectedRequest.method}</span>
         <span id="request-table-path">{selectedRequest.path}</span>
       </li>
-      <Headers headers={selectedRequest.headers}/>
-      <RequestBody body={selectedRequest.body}/>
+      <Headers headers={selectedRequest.headers} copyClick={copyClick}/>
+      <RequestBody body={selectedRequest.body} copyClick={copyClick}/>
     </ul>
   </div>
   )
