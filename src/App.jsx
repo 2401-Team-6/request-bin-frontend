@@ -23,7 +23,7 @@ function App() {
       }).catch(err => {
         console.log(err.message)
       })
-  }, [])
+  }, [selectedEP])
 
   const handleSidebarClick = (e, sidebarRequest) => {
     axios
@@ -33,6 +33,15 @@ function App() {
         setSelectedRequest(reqInfo)
       }).catch(err => {
         console.log(err.message)
+      })
+  }
+
+  const handleNewEndpointClick = (e) => {
+    axios
+      .get(`http//localhost:3000/newEndpoint`) // Will change to this /api/new
+      .then(response => {
+        setSelectedEP(response.data.hash) // Check with backend about the format of this response
+        setEndpoints(endpoints.concat(response.data.hash))
       })
   }
 
