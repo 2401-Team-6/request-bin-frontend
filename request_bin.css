@@ -1,0 +1,322 @@
+/* th, tr {
+  outline: 1px solid blue;
+}
+
+td {
+  outline: 1px solid green;
+} */
+
+body,
+html {
+  height: 100%;
+  box-sizing: border-box;
+}
+
+header {
+  text-align: center;
+  font-size: 2rem;
+  padding: 2rem;
+  border-bottom: 1px solid grey;
+  height: 36px;
+}
+
+#hash-dropdown {
+  font-size: 1.5rem;
+}
+
+main {
+  display: flex;
+  height: calc(100% - 101px);
+  /* padding: 0 1rem; */
+}
+
+#sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 40%;
+  height: 100%;
+  border-right: 1px solid grey;
+}
+
+#sidebar table * {
+  padding-left: 1rem;
+}
+
+#sidebar table {
+  width: 100%;
+  text-align: left;
+}
+
+main label {
+  display: inline-block;
+  cursor: pointer;
+  padding: 10px;
+  border: 1px solid grey;
+}
+
+main label:hover {
+  background-color: pink;
+}
+
+label[for=live], label[for=raw] {
+  margin: 0.5rem 0 0.5rem 0.5rem;
+}
+
+label[for=pause], label[for=structured] {
+  margin: 0.5rem 0.5rem 0.5rem 0;
+}
+
+input:checked + label {
+  border: none;
+  background: red;
+}
+
+input[type=radio] {
+  display: none;
+}
+
+#sidebar-header {
+  display: flex;
+  align-items: stretch;
+}
+
+#search {
+  width: 100%;
+  margin: 0.5rem 0.5rem 0.5rem 0;
+  padding: 0 0.5rem 0 1.85rem;
+}
+
+td, li, #request-content-header {
+  padding: 0.5rem 0.5rem 0.5rem 1rem;
+}
+
+#sidebar td {
+  vertical-align: middle;
+  cursor: pointer;
+  height: 1.35rem;
+}
+
+.sidebar-date th {
+  padding: 1.5rem 0.5rem 0.5rem 0.5rem;
+  font-weight: bold;
+  font-size: 1.1rem;
+  border-bottom: 1px solid lightgrey;
+}
+
+#delete-all {
+  text-align: center;
+  padding: 1.1rem;
+  cursor: pointer;
+  margin-top: auto;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+#sidebar tr:hover, #delete-all:hover {
+  background-color: green;
+}
+
+.sidebar-date th:hover {
+  background-color: white;
+}
+
+#request-content {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+}
+
+#request-content-header {
+  margin: 1.05rem 0 1.5rem 0;
+  padding-bottom: 0.8rem;
+  display: table;
+  width: calc(100% - 1.5rem);
+  border-bottom: 1px solid grey;
+}
+
+#request-content-header span {
+  display: table-cell;
+  text-align: right;
+}
+#request-content-header span:first-child {
+  text-align: left;
+}
+
+#request-list {
+  width: 100%;
+}
+
+.copy-data {
+  position: relative;
+  float: right;
+  right: 0.7rem;
+  top: 0.7rem;
+  height: 1rem;
+  width: 1rem;
+}
+
+#request-body {
+  background-color: ghostwhite;
+  border: 1px solid silver;
+  padding: 0 20px 10px 20px;
+  margin: 0 0 0 1rem; 
+}
+
+#request-table-path {
+  display: block;
+  float: right;
+}
+
+li > div {
+  position: relative;
+  top: -1.5rem;
+  margin-left: 5rem;
+}
+
+.request-list-header {
+  display: inline-block;
+  width: 4rem;
+}
+
+#request-list-method {
+  margin-left: 1.7rem;
+}
+
+#request-list table td:first-child {
+  font-weight: bold;
+}
+
+#request-list li:nth-last-child(2) * {
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+#request-list li:nth-last-child(2) label {
+  padding-top: 0.3rem;
+  padding-bottom: 0.3rem;
+}
+
+#request-list label {
+  position: relative;
+  right: 1.2rem;
+  margin: 0 0 0.75rem 0;
+  border: none;
+  padding: 0.3rem 0.5rem;
+}
+
+#request-headers {
+  padding-top: 0;
+}
+
+#body-row, #headers-row {
+  border-top: 1px solid lightgray;
+}
+
+#request-headers tr td {
+  padding: 0.25rem;
+}
+
+#request-headers tr td:first-child {
+  font-weight: bold;
+  padding-right: 0.75rem;
+  border-right: 1px solid lightgrey;
+}
+
+#request-headers tr td:last-child {
+  padding-left: 0.75rem;
+}
+
+.json-key {
+  color: brown;
+}
+
+.json-value {
+  color: navy;
+}
+
+.json-string {
+  color: olive;
+}
+
+.get {
+  color: red;
+}
+
+.post {
+  color: green;
+}
+
+.delete {
+  color: blue;
+}
+
+.head {
+  color: orange;
+}
+
+.put {
+  color: violet;
+}
+
+.connect {
+  color: indigo;
+}
+
+.trace {
+  color: yellowgreen;
+}
+
+.patch {
+  color: mediumseagreen;
+}
+
+.actionable:hover {
+  cursor: pointer;
+}
+
+#new-endpoint, #copy-endpoint {
+  position: relative;
+  top: 0.2rem;
+  height: 1.5rem;
+  width: 1.5rem;
+  margin: 0 0.3rem;
+}
+
+.request-content-collapse {
+  position: relative;
+  top: -0.15rem;
+  height: 0.35rem;
+  width: 0.7rem;  
+  margin-left: 0.35rem;
+}
+
+#search-icon {
+  position: relative;
+  top: 1.2rem;
+  left: 1.6rem;
+  height: 1rem;
+  width: 1rem;
+}
+
+.delete-icon {
+  position: relative;
+  width: 1.1rem;
+  height: 1.3rem;
+  top: 0.2rem;
+  right: 0.3rem;
+}
+
+.sidebar-delete {
+  height: 1.2rem;
+  width: 1rem;
+  display: none;
+  position: relative;
+}
+
+#sidebar tr:hover .sidebar-delete {
+  display: block;
+}
+
+#sidebar td:has(> .sidebar-delete) {
+  width: 2.2rem;
+}
