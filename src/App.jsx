@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import Sidebar from "./components/Sidebar"
 import RequestContent from "./components/RequestContent"
+import EndpointDropdown from './components/EndpointDropdown'
 import axios from "axios"
 
 function App() {
@@ -8,16 +9,19 @@ function App() {
   const [selectedEP, setSelectedEP] = useState([])
   const [requests, setRequests] = useState([])
   const [selectedRequest, setSelectedRequest] = useState({})
-
+  
+  // If client has previous endpoints stored in local storage, load them
   useEffect(() => {
     if (localStorage.userEndpoints) {
       setEndpoints(localStorage.userEndpoints)
+      setSelectedEP(localStorage.userEndpoints[0])
     }
   }, [])
   
+  // Load the requests for the selected endpoint (each time )
   useEffect(() => {
     axios
-      .get("http://localhost:3000/requests") // Will change this to /api/:hash
+      .get("http://localhost:3000/requests") // Will change this to /api/${selectedEP.hash}
       .then(response => {
         setRequests(response.data)
       }).catch(err => {
@@ -40,8 +44,9 @@ function App() {
     axios
       .get(`http//localhost:3000/newEndpoint`) // Will change to this /api/new
       .then(response => {
-        setSelectedEP(response.data.hash) // Check with backend about the format of this response
-        setEndpoints(endpoints.concat(response.data.hash))
+        setSelectedEP(response.data) // Check with backend about the format of this response
+        setEndpoints(endpoints.concat(response.data))
+        localStorage.userEndpoints.push(response.data)
       })
   }
 
@@ -49,6 +54,7 @@ function App() {
     <>
       <header>
         <label htmlFor="hash">ourrequestbinsite.com/</label>
+        <EndpointDropdown endpoints={endpoints} selectedId={selectedEP.id}/>
       </header>
       <main>
         <Sidebar requests={requests} handleSidebarClick={handleSidebarClick}/>

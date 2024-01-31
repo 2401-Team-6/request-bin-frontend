@@ -4,7 +4,8 @@
         "id": 1,
         "method": "POST",
         "path": "/",
-        "timestamp": "2021-01-30 17:17:11.260791-05"
+        "timestamp": "2021-01-30 17:17:11.260791-05",
+        "endpoint_id": 10
     },
     {
         "id": 2,
@@ -42,5 +43,9 @@
           "name": "Chewie"
       }
     }
-  ]
+  ],
+  "newEndpoint": {
+    "id": 10,
+    "hash": "x5hgtrb122lmoa"
+  }
 }
