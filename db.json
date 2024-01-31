@@ -46,12 +46,14 @@
   ],
   "endpoints": [
     {
-      "id": 1,
-      "hash": "jsnhdbsljkknln"
+      "id": "jsnhdbsljkknln",
+      "hash": "jsnhdbsljkknln",
+      "db_id": 10
     },
     {
-      "id": 2,
-      "hash": "skjnfsrlkmerke"
+      "id": "skjnfsrlkmerke",
+      "hash": "skjnfsrlkmerke",
+      "db_id": 5
     }
   ],
   "newEndpoint": {

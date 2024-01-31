@@ -2,26 +2,30 @@ import { useState, useEffect } from 'react'
 import Sidebar from "./components/Sidebar"
 import RequestContent from "./components/RequestContent"
 import EndpointDropdown from './components/EndpointDropdown'
+import CreateEndpointButton from './components/CreateEndpointButton'
 import axios from "axios"
 
 function App() {
   const [endpoints, setEndpoints] = useState([])
-  const [selectedEP, setSelectedEP] = useState([])
+  const [selectedEP, setSelectedEP] = useState({})
   const [requests, setRequests] = useState([])
   const [selectedRequest, setSelectedRequest] = useState({})
   
   // If client has previous endpoints stored in local storage, load them
   useEffect(() => {
-    if (localStorage.userEndpoints) {
-      setEndpoints(localStorage.userEndpoints)
-      setSelectedEP(localStorage.userEndpoints[0])
-    }
+    if (!localStorage.getItem("userEndpoints") || localStorage.getItem("userEndpoints") === "") {
+      localStorage.setItem("userEndpoints", "[]")
+    } else {
+      const endpointsInStorage = JSON.parse(localStorage.getItem("userEndpoints"))
+      setEndpoints(endpointsInStorage)
+      setSelectedEP(endpointsInStorage[0] || {})
+    } 
   }, [])
   
   // Load the requests for the selected endpoint (each time )
   useEffect(() => {
     axios
-      .get("http://localhost:3000/requests") // Will change this to /api/${selectedEP.hash}
+      .get("http://localhost:3000/requests/") // Will change this to /api/${selectedEP.hash}
       .then(response => {
         setRequests(response.data)
       }).catch(err => {
@@ -46,20 +50,31 @@ function App() {
       .then(response => {
         setSelectedEP(response.data) // Check with backend about the format of this response
         setEndpoints(endpoints.concat(response.data))
-        localStorage.userEndpoints.push(response.data)
-      })
+        const endpointsInStorage = JSON.parse(localStorage.getItem("userEndpoints"))
+        localStorage.setItem("userEndpoints", JSON.stringify(endpointsInStorage.concat(response.data)))
+      }).catch(err => console.log(err.message))
   }
 
-  const handleEndpointSubmit = (e, hash) => {
-    if (e.key !== 'Enter') return;
-
+  const handleEndpointSubmit = (e) => {
     axios
-      .get(`http://localhost:3000/endpoints/${hash}`)
+      .get(`http://localhost:3000/endpoints/${e.target.value}`)
       .then(response => {
-        // Handle 404
         setSelectedEP(response.data)
-        setEndpoints(endpoints.concat(response.data))
-        localStorage.userEndpoints.push(response.data)
+
+        if (endpoints.find(endpoint => endpoint.hash === response.data.hash)) {
+          return
+        } else {
+          setEndpoints(endpoints.concat(response.data))
+        }
+        
+        const endpointsInStorage = JSON.parse(localStorage.getItem("userEndpoints"))
+        if (endpointsInStorage.find(endpoint => endpoint.hash === response.data.hash)) {
+          return
+        } else {
+          localStorage.setItem("userEndpoints", JSON.stringify(endpointsInStorage.concat(response.data)))
+        }
+      }).catch(err => {
+        console.log(err.message)
       })
   }
  
@@ -67,7 +82,8 @@ function App() {
     <>
       <header>
         <label htmlFor="hash">ourrequestbinsite.com/</label>
-        <EndpointDropdown endpoints={endpoints} selectedEP={selectedEP} onKeyPress/>
+        <EndpointDropdown endpoints={endpoints} selectedEP={selectedEP} onSubmit={handleEndpointSubmit}/>
+        <CreateEndpointButton onClick={handleNewEndpointClick}/>
       </header>
       <main>
         <Sidebar requests={requests} handleSidebarClick={handleSidebarClick}/>
