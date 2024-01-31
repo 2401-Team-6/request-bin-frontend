@@ -9,7 +9,7 @@ const SidebarRequest = ({ request, handleClick }) => {
       <td>
         {request.timestamp}
       </td>
-      <td className={request.method}>
+      <td className={request.method.toLowerCase()}>
         {request.method}
       </td>
       <td>

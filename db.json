@@ -44,6 +44,16 @@
       }
     }
   ],
+  "endpoints": [
+    {
+      "id": 1,
+      "hash": "jsnhdbsljkknln"
+    },
+    {
+      "id": 2,
+      "hash": "skjnfsrlkmerke"
+    }
+  ],
   "newEndpoint": {
     "id": 10,
     "hash": "x5hgtrb122lmoa"

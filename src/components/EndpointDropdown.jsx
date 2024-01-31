@@ -1,14 +1,15 @@
-const EndpointDropdown = ({endpoints, selectedId}) => {
+const EndpointDropdown = ({endpoints, selectedEP}) => {
   return (
-    <select id="hash">
-      {
-        endpoints.map(endpoint => (
-            <option value={endpoint.hash} selected={endpoint.id === selectedId}>
-              {endpoint.hash}
-            </option>
-        ))
-      }
-    </select>
+    <>
+      <input type="text" name="hash" id="hash-dropdown" list="hashes" placeholder={selectedEP.hash}></input>
+      <datalist id="hashes">
+        {
+          endpoints.map(endpoint => (
+              <option value={endpoint.hash} />
+          ))
+        }
+      </datalist>
+    </>
   )
 }
 

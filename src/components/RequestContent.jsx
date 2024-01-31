@@ -42,6 +42,10 @@ const RequestBody = ({ body }) => (
 )
 
 const RequestContent = ({ selectedRequest }) => {
+  if (Object.keys(selectedRequest).length == 0) {
+    return (<></>)
+  }
+
   return (
     <div id="request-content">
     <div id="request-content-header">
@@ -52,7 +56,7 @@ const RequestContent = ({ selectedRequest }) => {
     <ul id="request-list">
       <li>
         <h1 className="request-list-header">Details</h1>
-        <span className={selectedRequest.method} id="request-list-method">{selectedRequest.method}</span>
+        <span className={selectedRequest.method.toLowerCase()} id="request-list-method">{selectedRequest.method}</span>
         <span id="request-table-path">{selectedRequest.path}</span>
       </li>
       <Headers headers={selectedRequest.headers}/>

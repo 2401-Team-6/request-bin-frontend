@@ -42,7 +42,7 @@ function App() {
 
   const handleNewEndpointClick = (e) => {
     axios
-      .get(`http//localhost:3000/newEndpoint`) // Will change to this /api/new
+      .get(`http://localhost:3000/newEndpoint`) // Will change to this /api/new
       .then(response => {
         setSelectedEP(response.data) // Check with backend about the format of this response
         setEndpoints(endpoints.concat(response.data))
@@ -50,11 +50,24 @@ function App() {
       })
   }
 
+  const handleEndpointSubmit = (e, hash) => {
+    if (e.key !== 'Enter') return;
+
+    axios
+      .get(`http://localhost:3000/endpoints/${hash}`)
+      .then(response => {
+        // Handle 404
+        setSelectedEP(response.data)
+        setEndpoints(endpoints.concat(response.data))
+        localStorage.userEndpoints.push(response.data)
+      })
+  }
+ 
   return (
     <>
       <header>
         <label htmlFor="hash">ourrequestbinsite.com/</label>
-        <EndpointDropdown endpoints={endpoints} selectedId={selectedEP.id}/>
+        <EndpointDropdown endpoints={endpoints} selectedEP={selectedEP} onKeyPress/>
       </header>
       <main>
         <Sidebar requests={requests} handleSidebarClick={handleSidebarClick}/>
