@@ -20,7 +20,6 @@ function App() {
   }, [])
 
   const handleSidebarClick = (e, sidebarRequest) => {
-    console.log(sidebarRequest)
     axios
       .get(`http://localhost:3000/requestData/${sidebarRequest.id}`)
       .then(response => {
