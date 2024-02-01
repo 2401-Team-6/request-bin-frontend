@@ -176,7 +176,7 @@ function App() {
   return (
     <>
       <header>
-        <label htmlFor='hash'>ourrequestbinsite.com /</label>
+        <label htmlFor='hash'>ourrequestbinsite.com/log/ </label>
         <EndpointDropdown
           endpoints={endpoints}
           selectedEP={selectedEP}
