@@ -6,8 +6,6 @@ import HeaderButton from './components/HeaderButton';
 import useSocket from './hooks/UseSocket';
 import axios from 'axios';
 
-let ws = null;
-
 function App() {
   const [endpoints, setEndpoints] = useState([]);
   const [selectedEP, setSelectedEP] = useState({});
@@ -31,7 +29,8 @@ function App() {
     }
   }, []);
 
-  // Load the requests for the selected endpoint (each time )
+  // Load the requests for the selected endpoint & initialize a websockets connection
+  // Each time a new endpoint is selected
   useEffect(() => {
     if (selectedEP.hash === undefined) {
       return;
@@ -40,7 +39,7 @@ function App() {
     connectSocket(selectedEP.hash);
 
     axios
-      .get(`/api/${selectedEP.hash}`) // Will change this to /api/${selectedEP.hash}
+      .get(`/api/${selectedEP.hash}`) 
       .then((response) => {
         setRequests(response.data);
       })
@@ -55,13 +54,14 @@ function App() {
     }
   }, [requests]);
 
+  // Handle clicks on sidebar requests
   const handleSidebarClick = (e, sidebarRequest) => {
     if (e.target.tagName === 'SPAN') {
       return;
     }
 
     axios
-      .get(`api/${selectedEP.hash}/${sidebarRequest.id}`) // Will change this to /api/:hash/sidebarRequest.id
+      .get(`api/${selectedEP.hash}/${sidebarRequest.id}`)
       .then((response) => {
         const reqInfo = Object.assign({}, response.data, sidebarRequest);
         setSelectedRequest(reqInfo);
@@ -71,6 +71,7 @@ function App() {
       });
   };
 
+  // Handle clicking the "create a new endpoint" button
   const handleNewEndpointClick = (e) => {
     axios
       .post(`/api/new`) // Will change to this /api/new
@@ -88,6 +89,7 @@ function App() {
       .catch((err) => console.log(err.message));
   };
 
+  // Handle an endpoint submitted through the text field
   const handleEndpointSubmit = (e) => {
     axios
       .get(`api/endpoint/${e.target.value}`)
@@ -129,6 +131,7 @@ function App() {
       });
   };
 
+  // Handle copy button clicks
   const handleCopyClick = (e, text) => {
     function isJsonObject(jsonString) {
       try {
@@ -154,6 +157,7 @@ function App() {
     navigator.clipboard.writeText(JSON.stringify(text));
   };
 
+  // Delete all requests button handler
   const handleDeleteAll = (e) => {
     axios
       .delete(`/api/${selectedEP.hash}`)
@@ -163,6 +167,7 @@ function App() {
       .catch((err) => console.log(err.message));
   };
 
+  // Delete individual request button handler
   const handleDeleteRequest = (e, requestId) => {
     console.log(requestId);
     axios

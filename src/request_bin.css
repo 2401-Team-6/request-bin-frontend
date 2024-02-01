@@ -55,13 +55,32 @@ main {
   background-color: #F2E9E4;
 }
 
-#sidebar table * {
+#sidebar table *, #sidebar h1 {
   padding-left: 1rem;
 }
 
 #sidebar table {
   width: 100%;
   text-align: left;
+}
+
+#waiting {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-left: 10px;
+  border: 3px solid rgba(255,255,255,.4);
+  border-radius: 50%;
+  border-top-color: rgba(74, 78, 105, 0.5);
+  animation: spin 1s ease-in-out infinite;
+  -webkit-animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { -webkit-transform: rotate(360deg); }
+}
+@-webkit-keyframes spin {
+  to { -webkit-transform: rotate(360deg); }
 }
 
 main label {

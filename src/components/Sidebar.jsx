@@ -65,19 +65,27 @@ const Sidebar = ({ requests, handleSidebarClick, handleDeleteAll, handleDeleteRe
     partitioned[partitioned.length - 1].push(sorted[i])
   }
 
-  
-  return (
-    <div id="sidebar">
-      <table id="sidebar-table">
-        <tbody>
-        {
-          partitioned.map(arr => <SidebarDate arr={arr} key={epochToDate(arr[0].created)} handleClick={handleSidebarClick} handleDeleteRequest={handleDeleteRequest} />)
-        }
-        </tbody>
-      </table>
-      <DeleteAllButton onClick={handleDeleteAll}/>
-    </div>
-  )
+  if (requests.length > 0) {
+    return (
+      <div id="sidebar">
+        <table id="sidebar-table">
+          <tbody>
+          {
+            partitioned.map(arr => <SidebarDate arr={arr} key={epochToDate(arr[0].created)} handleClick={handleSidebarClick} handleDeleteRequest={handleDeleteRequest} />)
+          }
+          </tbody>
+        </table>
+        <DeleteAllButton onClick={handleDeleteAll}/>
+      </div>
+    )
+  } else {
+    return (
+      <div id="sidebar">
+        <br/>
+        <h1>Waiting for first request... <span id="waiting"></span></h1>
+      </div>
+    )
+  }
 }
 
 const SidebarDate = ({ arr, handleClick, handleDeleteRequest }) => (
