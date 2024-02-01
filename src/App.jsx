@@ -24,8 +24,12 @@ function App() {
   
   // Load the requests for the selected endpoint (each time )
   useEffect(() => {
+    if (selectedEP.hash === undefined) {
+      return
+    }
+
     axios
-      .get("http://localhost:3000/requests/") // Will change this to /api/${selectedEP.hash}
+      .get(`/api/${selectedEP.hash}`) // Will change this to /api/${selectedEP.hash}
       .then(response => {
         setRequests(response.data)
       }).catch(err => {
@@ -35,7 +39,7 @@ function App() {
 
   const handleSidebarClick = (e, sidebarRequest) => {
     axios
-      .get(`http://localhost:3000/requestData/${sidebarRequest.id}`) // Will change this to /api/:hash/sidebarRequest.id
+      .get(`api/${selectedEP.hash}/${sidebarRequest.id}`) // Will change this to /api/:hash/sidebarRequest.id
       .then(response => {
         const reqInfo = Object.assign({}, response.data, sidebarRequest)
         setSelectedRequest(reqInfo)
@@ -46,7 +50,7 @@ function App() {
 
   const handleNewEndpointClick = (e) => {
     axios
-      .get(`http://localhost:3000/newEndpoint`) // Will change to this /api/new
+      .get(`/api/new`) // Will change to this /api/new
       .then(response => {
         setSelectedEP(response.data) // Check with backend about the format of this response
         setEndpoints(endpoints.concat(response.data))
@@ -57,7 +61,7 @@ function App() {
 
   const handleEndpointSubmit = (e) => {
     axios
-      .get(`http://localhost:3000/endpoints/${e.target.value}`)
+      .get(`api/endpoint/${e.target.value}`)
       .then(response => {
         setSelectedEP(response.data)
 
@@ -86,7 +90,7 @@ function App() {
   const handleDeleteAll = (e) => {
     console.log("delete all")
     axios
-      .delete(`http://localhost:3000/api/${selectedEP.hash}`)
+      .delete(`/api/${selectedEP.hash}`)
       .then(_response => {
         setRequests([])
       }).catch(err => console.log(err.message))
@@ -95,7 +99,7 @@ function App() {
   const handleDeleteRequest = (e, requestId) => {
     console.log(requestId)
     axios
-      .delete(`http://localhost:3000/api/${selectedEP.hash}/${requestId}`)
+      .delete(`/api/${selectedEP.hash}/${requestId}`)
       .then(_response => {
         setRequests([])
       }).catch(err => console.log(err.message))
