@@ -82,6 +82,24 @@ function App() {
     console.log("fired")
     navigator.clipboard.writeText(text)
   }
+
+  const handleDeleteAll = (e) => {
+    console.log("delete all")
+    axios
+      .delete(`http://localhost:3000/api/${selectedEP.hash}`)
+      .then(_response => {
+        setRequests([])
+      }).catch(err => console.log(err.message))
+  }
+
+  const handleDeleteRequest = (e, requestId) => {
+    console.log(requestId)
+    axios
+      .delete(`http://localhost:3000/api/${selectedEP.hash}/${requestId}`)
+      .then(_response => {
+        setRequests([])
+      }).catch(err => console.log(err.message))
+  }
  
   return (
     <>
@@ -92,7 +110,7 @@ function App() {
         <HeaderButton onClick={handleNewEndpointClick} src="./assets/img/plus_icon.png" />
       </header>
       <main>
-        <Sidebar requests={requests} handleSidebarClick={handleSidebarClick}/>
+        <Sidebar requests={requests} handleSidebarClick={handleSidebarClick} handleDeleteAll={handleDeleteAll} handleDeleteRequest={handleDeleteRequest}/>
         <RequestContent selectedRequest={selectedRequest} copyClick={handleCopyClick}/>
       </main>
   </>
