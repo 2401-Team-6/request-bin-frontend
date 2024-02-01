@@ -130,7 +130,24 @@ function App() {
   };
 
   const handleCopyClick = (e, text) => {
-    while (typeof text === 'string') {
+    function isJsonObject(jsonString) {
+      try {
+          var o = JSON.parse(jsonString);
+  
+          // Handle non-exception-throwing cases:
+          // Neither JSON.parse(false) or JSON.parse(1234) throw errors, hence the type-checking,
+          // but... JSON.parse(null) returns null, and typeof null === "object", 
+          // so we must check for that, too. Thankfully, null is falsey, so this suffices:
+          if (o && typeof o === "object") {
+              return o;
+          }
+      }
+      catch (e) { }
+  
+      return false;
+    }
+  
+    while (text === 'string' && isJsonObject(text)) {
       text = JSON.parse(text)
     }
 
@@ -167,7 +184,10 @@ function App() {
         />
         <HeaderButton
           onClick={(e) =>
-            handleCopyClick(e, document.getElementById('hash-dropdown').value)
+            handleCopyClick(e,
+              document.getElementById('hash-dropdown').value !== '' ? 
+                document.getElementById('hash-dropdown').value :
+                document.getElementById('hash-dropdown').getAttribute('placeholder'))
           }
           type='copy'
         />
