@@ -50,7 +50,7 @@ function App() {
 
   const handleNewEndpointClick = (e) => {
     axios
-      .get(`/api/new`) // Will change to this /api/new
+      .post(`/api/new`) // Will change to this /api/new
       .then(response => {
         setSelectedEP(response.data) // Check with backend about the format of this response
         setEndpoints(endpoints.concat(response.data))
