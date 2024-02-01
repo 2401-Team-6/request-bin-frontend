@@ -1,5 +1,5 @@
 import { JsonViewer } from '@textea/json-viewer'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const CopyButton = ({ onClick }) => (
   <span className="material-symbols-outlined copy-data actionable" onClick={onClick}>
@@ -37,8 +37,25 @@ const Headers = ({ headers, copyClick }) => (
   </li>
 )
 
-const RequestBody = ({ body, copyClick }) => {
-  const [prettyBody, setPrettyBody] = useState(true);
+function isJsonString(text) {
+  try {
+    while (typeof text === "string") {
+      text = JSON.parse(text)
+    }
+  } catch (e) {
+    return false;
+  }
+
+  return true;
+}
+
+const RequestBody = ({ body, copyClick, selectedRequest }) => {
+  const [bodyIsJson, setBodyIsJson] = useState(true);
+  const [displayLabels, setDisplayLabels] = useState(false);
+  
+  useEffect(() => {
+    setDisplayLabels(isJsonString(body))
+  }, [selectedRequest])
 
   return (
     <li id="body-row">
@@ -46,24 +63,29 @@ const RequestBody = ({ body, copyClick }) => {
       <img className="request-content-collapse actionable" src="./assets/img/arrow_icon.png" />
       <div className="collapsible">
         <CopyButton onClick={(e) => copyClick(e, JSON.stringify(body))}/>
-        <div id="request-body">
-        <input type="radio" id="pretty" name="json-display-type" value="pretty" defaultChecked />
-          <BodyDisplayLabel text="pretty" onClick={(e) => setPrettyBody(true)} />
+        <div id="request-body" style={displayLabels ? {} : {"padding-top": "1rem"}}>
+          <input type="radio" id="pretty" name="json-display-type" value="pretty" defaultChecked />
+          <BodyDisplayLabel text="pretty" onClick={(e) => setBodyIsJson(true)} display={displayLabels} />
           <input type="radio" id="raw" name="json-display-type" value="raw" />
-          <BodyDisplayLabel text="raw" onClick={(e) => setPrettyBody(false)} />
-          <BodyContent body={body} prettyBody={prettyBody} />
+          <BodyDisplayLabel text="raw" onClick={(e) => setBodyIsJson(false)} display={displayLabels} />
+          <BodyContent body={body} bodyIsJson={bodyIsJson} />
         </div>
       </div>
     </li>
   )
 }
 
-const BodyContent = ({ body, prettyBody }) => {
-  return prettyBody ? (<JsonViewer value={JSON.parse(body)} />) : (<div>{body}</div>)
+const BodyContent = ({ body, bodyIsJson }) => {
+  try {
+    JSON.parse(body)
+    return bodyIsJson ? (<JsonViewer value={JSON.parse(body)} />) : (<div>{body}</div>)
+  } catch (e) {
+    return (<div>{body}</div>)
+  }
 }
 
-const BodyDisplayLabel = ({ text, onClick }) => (
-  <label htmlFor={text.toLowerCase()} onClick={onClick}>{text.toUpperCase()}</label>
+const BodyDisplayLabel = ({ text, onClick, display }) => (
+  <label htmlFor={text.toLowerCase()} onClick={onClick} className={display ? '' : 'hidden' }>{text.toUpperCase()}</label>
 )
 
 const RequestContent = ({ selectedRequest, copyClick }) => {
@@ -84,7 +106,7 @@ const RequestContent = ({ selectedRequest, copyClick }) => {
         <span id="request-table-path">{selectedRequest.path}</span>
       </li>
       <Headers headers={selectedRequest.headers} copyClick={copyClick}/>
-      <RequestBody body={selectedRequest.body} copyClick={copyClick}/>
+      <RequestBody body={selectedRequest.body} copyClick={copyClick} selectedRequest={selectedRequest} />
     </ul>
   </div>
   )

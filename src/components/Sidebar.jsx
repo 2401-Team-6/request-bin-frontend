@@ -1,4 +1,5 @@
 import { DateTime } from "luxon";
+import { useState } from "react";
 
 const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
 function epochToDate(epoch) {
@@ -8,13 +9,15 @@ function epochToDate(epoch) {
     .toLocal().toISO().toString()).toLocaleDateString("en-US", dateOptions)
 }
 
-const SidebarRequest = ({ request, handleClick, handleDeleteRequest }) => {
+const SidebarRequest = ({ request, handleClick, handleDeleteRequest, selectedSidebarRequest, setSelectedSidebarRequest }) => {
+
   const clickHandler = (event) => {
+    setSelectedSidebarRequest(request)
     handleClick(event, request)
   }
 
   return (  
-    <tr onClick={clickHandler}>
+    <tr onClick={clickHandler} className={selectedSidebarRequest.id === request.id ? 'clicked' : ''}>
       <td>
         {new Date(DateTime.fromSeconds(Number(request.created), { zone: 'UTC' })
           .toLocal().toISO().toString()).toLocaleTimeString("en-US")}
@@ -49,7 +52,7 @@ const DeleteRequestButton = ({ onClick }) => (
   </span>
 )
 
-const Sidebar = ({ requests, handleSidebarClick, handleDeleteAll, handleDeleteRequest }) => {
+const Sidebar = ({ requests, handleSidebarClick, handleDeleteAll, handleDeleteRequest, selectedSidebarRequest, setSelectedSidebarRequest, selectedEP }) => {
   let sorted = requests.slice()
   sorted.sort((a, b) => a.created - b.created)
 
@@ -65,13 +68,24 @@ const Sidebar = ({ requests, handleSidebarClick, handleDeleteAll, handleDeleteRe
     partitioned[partitioned.length - 1].push(sorted[i])
   }
 
-  if (requests.length > 0) {
+  if (requests.length > 0 || !selectedEP.id ) {
     return (
       <div id="sidebar">
         <table id="sidebar-table">
           <tbody>
           {
-            partitioned.map(arr => <SidebarDate arr={arr} key={epochToDate(arr[0].created)} handleClick={handleSidebarClick} handleDeleteRequest={handleDeleteRequest} />)
+            partitioned.map(arr => {
+              return (
+                <SidebarDate 
+                  arr={arr}
+                  key={epochToDate(arr[0].created)}
+                  handleClick={handleSidebarClick}
+                  handleDeleteRequest={handleDeleteRequest}
+                  selectedSidebarRequest={selectedSidebarRequest}
+                  setSelectedSidebarRequest={setSelectedSidebarRequest}
+                />
+              )
+            })
           }
           </tbody>
         </table>
@@ -88,14 +102,27 @@ const Sidebar = ({ requests, handleSidebarClick, handleDeleteAll, handleDeleteRe
   }
 }
 
-const SidebarDate = ({ arr, handleClick, handleDeleteRequest }) => (
-  <>
-    <tr className="sidebar-date" key={epochToDate(arr[0].created)}>
-      <th colSpan="4">{epochToDate(arr[0].created)}</th>
-    </tr>
+const SidebarDate = ({ arr, handleClick, handleDeleteRequest, selectedSidebarRequest, setSelectedSidebarRequest }) => {
+  return (
+    <>
+      <tr className="sidebar-date" key={epochToDate(arr[0].created)}>
+        <th colSpan="4">{epochToDate(arr[0].created)}</th>
+      </tr>
 
-    {arr.map(request => <SidebarRequest key={request.id} request={request} handleClick={handleClick} handleDeleteRequest={handleDeleteRequest}/>)}
-  </>
-)
+      {arr.map(request => {
+        return (
+          <SidebarRequest
+            key={request.id}
+            request={request}
+            handleClick={handleClick}
+            handleDeleteRequest={handleDeleteRequest}
+            selectedSidebarRequest={selectedSidebarRequest}
+            setSelectedSidebarRequest={setSelectedSidebarRequest}
+          />
+        )
+      })}
+    </>
+  )
+}
 
 export default Sidebar

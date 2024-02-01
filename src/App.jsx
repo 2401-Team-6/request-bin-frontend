@@ -11,6 +11,7 @@ function App() {
   const [selectedEP, setSelectedEP] = useState({});
   const [requests, setRequests] = useState([]);
   const [selectedRequest, setSelectedRequest] = useState({});
+  const [selectedSidebarRequest, setSelectedSidebarRequest] = useState({});
   const { connectSocket } = useSocket(requests, setRequests);
 
   // If client has previous endpoints stored in local storage, load them
@@ -133,28 +134,13 @@ function App() {
 
   // Handle copy button clicks
   const handleCopyClick = (e, text) => {
-    function isJsonObject(jsonString) {
-      try {
-          var o = JSON.parse(jsonString);
-  
-          // Handle non-exception-throwing cases:
-          // Neither JSON.parse(false) or JSON.parse(1234) throw errors, hence the type-checking,
-          // but... JSON.parse(null) returns null, and typeof null === "object", 
-          // so we must check for that, too. Thankfully, null is falsey, so this suffices:
-          if (o && typeof o === "object") {
-              return o;
-          }
+    try {
+      while (typeof text === "string") {
+        text = JSON.parse(text)
       }
-      catch (e) { }
-  
-      return false;
-    }
-  
-    while (text === 'string' && isJsonObject(text)) {
-      text = JSON.parse(text)
-    }
+    } catch (e) { }
 
-    navigator.clipboard.writeText(JSON.stringify(text));
+    navigator.clipboard.writeText(text);
   };
 
   // Delete all requests button handler
@@ -181,7 +167,7 @@ function App() {
   return (
     <>
       <header>
-        <label htmlFor='hash'>ourrequestbinsite.com/log/ </label>
+        <label htmlFor='hash'>{location.host}/log/ </label>
         <EndpointDropdown
           endpoints={endpoints}
           selectedEP={selectedEP}
@@ -207,6 +193,9 @@ function App() {
           handleSidebarClick={handleSidebarClick}
           handleDeleteAll={handleDeleteAll}
           handleDeleteRequest={handleDeleteRequest}
+          selectedSidebarRequest={selectedSidebarRequest}
+          setSelectedSidebarRequest={setSelectedSidebarRequest}
+          selectedEP={selectedEP}
         />
         <RequestContent
           selectedRequest={selectedRequest}

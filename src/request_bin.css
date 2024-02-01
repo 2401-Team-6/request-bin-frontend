@@ -366,5 +366,9 @@ li > div {
 }
 
 .clicked {
-  background-color: #9e8079;
+  background-color: #e4d9d7;
+}
+
+.hidden {
+  display: none;
 }
