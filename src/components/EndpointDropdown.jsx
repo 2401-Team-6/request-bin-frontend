@@ -9,15 +9,19 @@ const EndpointDropdown = ({endpoints, selectedEP, onSubmit}) => {
     }
 
     setTypedEP(e.target.value)
+
+    if (endpoints.find(ep => ep.hash === e.target.value)) {
+      onSubmit(e)
+    }
   }
 
   return (
     <>
-      <input type="text" name="hash" id="hash-dropdown" list="hashes" placeholder={selectedEP.hash} onKeyUp={handleTyping}></input>
+      <input type="text" name="hash" id="hash-dropdown" list="hashes" placeholder={selectedEP.hash} onKeyUp={handleTyping} autoComplete="off"></input>
       <datalist id="hashes">
         {
           endpoints.map(endpoint => (
-              <option key={endpoint.hash} value={endpoint.hash} />
+              <option key={endpoint.hash} value={endpoint.hash} onClick={onSubmit} />
           ))
         }
       </datalist>

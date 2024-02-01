@@ -49,7 +49,17 @@ function App() {
       });
   }, [selectedEP]);
 
+  useEffect(() => {
+    if (!requests.some(req => req.id === selectedRequest.id)) {
+      setSelectedRequest({});
+    }
+  }, [requests]);
+
   const handleSidebarClick = (e, sidebarRequest) => {
+    if (e.target.tagName === 'SPAN') {
+      return;
+    }
+
     axios
       .get(`api/${selectedEP.hash}/${sidebarRequest.id}`) // Will change this to /api/:hash/sidebarRequest.id
       .then((response) => {
@@ -109,17 +119,25 @@ function App() {
         }
       })
       .catch((err) => {
+        let endpointsInStorage = JSON.parse(localStorage.getItem('userEndpoints'))
+        endpointsInStorage = endpointsInStorage.filter(ep => ep.hash !== e.target.value)
+
+        localStorage.setItem('userEndpoints', JSON.stringify(endpointsInStorage))
+        setEndpoints(endpoints.filter(ep => ep.hash !== e.target.value))
+
         console.log(err.message);
       });
   };
 
   const handleCopyClick = (e, text) => {
-    console.log('fired');
-    navigator.clipboard.writeText(text);
+    while (typeof text === 'string') {
+      text = JSON.parse(text)
+    }
+
+    navigator.clipboard.writeText(JSON.stringify(text));
   };
 
   const handleDeleteAll = (e) => {
-    console.log('delete all');
     axios
       .delete(`/api/${selectedEP.hash}`)
       .then((_response) => {
@@ -133,7 +151,7 @@ function App() {
     axios
       .delete(`/api/${selectedEP.hash}/${requestId}`)
       .then((_response) => {
-        setRequests([]);
+        setRequests(requests.filter((req) => req.id !== requestId))
       })
       .catch((err) => console.log(err.message));
   };
@@ -141,7 +159,7 @@ function App() {
   return (
     <>
       <header>
-        <label htmlFor='hash'>ourrequestbinsite.com/</label>
+        <label htmlFor='hash'>ourrequestbinsite.com /</label>
         <EndpointDropdown
           endpoints={endpoints}
           selectedEP={selectedEP}
@@ -151,11 +169,11 @@ function App() {
           onClick={(e) =>
             handleCopyClick(e, document.getElementById('hash-dropdown').value)
           }
-          src='./assets/img/copy_icon.png'
+          type='copy'
         />
         <HeaderButton
           onClick={handleNewEndpointClick}
-          src='./assets/img/plus_icon.png'
+          type='plus'
         />
       </header>
       <main>

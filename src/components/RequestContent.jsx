@@ -1,6 +1,11 @@
-const CopyButton = ({ onClick }) => {
-  return <img className="copy-data actionable" src="./assets/img/copy_icon.png" onClick={onClick}/>
-}
+import { JsonViewer } from '@textea/json-viewer'
+import { useState } from 'react';
+
+const CopyButton = ({ onClick }) => (
+  <span className="material-symbols-outlined copy-data actionable" onClick={onClick}>
+    content_copy
+  </span>
+)
 
 const Headers = ({ headers, copyClick }) => (
   <li id="headers-row">
@@ -32,17 +37,33 @@ const Headers = ({ headers, copyClick }) => (
   </li>
 )
 
-const RequestBody = ({ body, copyClick }) => (
-  <li id="body-row">
-    <h1 className="request-list-header">Body</h1>
-    <img className="request-content-collapse actionable" src="./assets/img/arrow_icon.png" />
-    <div className="collapsible">
-      <CopyButton onClick={(e) => copyClick(e, JSON.stringify(body))}/>
-      <pre id="request-body">
-<input type="radio" id="raw" name="json-display-type" value="raw" checked /><label htmlFor="raw">RAW</label><input type="radio" id="pretty" name="json-display-type" value="pretty" /><label htmlFor="pretty">PRETTY</label><input type="radio" id="structured" name="json-display-type" value="structured" /><label htmlFor="structured">STRUCTURED</label>
-{JSON.stringify(body)}</pre>
-    </div>
-  </li>
+const RequestBody = ({ body, copyClick }) => {
+  const [prettyBody, setPrettyBody] = useState(true);
+
+  return (
+    <li id="body-row">
+      <h1 className="request-list-header">Body</h1>
+      <img className="request-content-collapse actionable" src="./assets/img/arrow_icon.png" />
+      <div className="collapsible">
+        <CopyButton onClick={(e) => copyClick(e, JSON.stringify(body))}/>
+        <div id="request-body">
+        <input type="radio" id="pretty" name="json-display-type" value="pretty" defaultChecked />
+          <BodyDisplayLabel text="pretty" onClick={(e) => setPrettyBody(true)} />
+          <input type="radio" id="raw" name="json-display-type" value="raw" />
+          <BodyDisplayLabel text="raw" onClick={(e) => setPrettyBody(false)} />
+          <BodyContent body={body} prettyBody={prettyBody} />
+        </div>
+      </div>
+    </li>
+  )
+}
+
+const BodyContent = ({ body, prettyBody }) => {
+  return prettyBody ? (<JsonViewer value={JSON.parse(body)} />) : (<div>{body}</div>)
+}
+
+const BodyDisplayLabel = ({ text, onClick }) => (
+  <label htmlFor={text.toLowerCase()} onClick={onClick}>{text.toUpperCase()}</label>
 )
 
 const RequestContent = ({ selectedRequest, copyClick }) => {
@@ -53,9 +74,8 @@ const RequestContent = ({ selectedRequest, copyClick }) => {
   return (
     <div id="request-content">
     <div id="request-content-header">
-      <span>HTTP REQUEST</span>
-      <span><a href="#" id="copy-request">request link</a></span>
-      <span>{selectedRequest.timestamp}</span>
+      <h1 id="request-content-header-title">HTTP REQUEST</h1>
+      <span>{selectedRequest.created}</span>
     </div>
     <ul id="request-list">
       <li>
