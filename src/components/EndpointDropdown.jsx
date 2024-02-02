@@ -17,7 +17,7 @@ const EndpointDropdown = ({endpoints, selectedEP, onSubmit}) => {
 
   return (
     <>
-      <input type="text" name="hash" id="hash-dropdown" list="hashes" value={currentTypedEP} placeholder={selectedEP.hash} onChange={handleTyping} autoComplete="off"></input>
+      <input type="text" name="hash" id="hash-dropdown" list="hashes" value={currentTypedEP} placeholder={selectedEP.hash} onKeyUp={handleTyping} autoComplete="off"></input>
       <datalist id="hashes">
         {
           endpoints.map(endpoint => (
