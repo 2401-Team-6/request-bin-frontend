@@ -37,6 +37,20 @@ const Headers = ({ headers, copyClick }) => (
   </li>
 )
 
+const Query = ({ query, copyClick }) => (
+  <li id="query-row">
+  <h1 className="request-list-header">Query</h1>
+  <div id="request-queries">
+    {Object.keys(query).map((key) => (
+      <div key={key}>
+        <span>{key}={query[key]}</span>
+      </div>
+    ))}
+    <CopyButton onClick={(e) => copyClick(e, `?${queryString}`)} />
+  </div>
+</li>
+)
+
 function isJsonString(text) {
   try {
     while (typeof text === "string") {
@@ -109,6 +123,7 @@ const RequestContent = ({ selectedRequest, copyClick }) => {
       </li>
       <Headers headers={selectedRequest.headers} copyClick={copyClick}/>
       <RequestBody body={selectedRequest.body} copyClick={copyClick} selectedRequest={selectedRequest} />
+      <Query query={selectedRequest.query} copyClick={copyClick} />
     </ul>
   </div>
   )
