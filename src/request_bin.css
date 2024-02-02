@@ -398,3 +398,12 @@ li > div {
 #request-queries {
   margin-right: 0.5rem;
 }
+
+#request-queries div {
+  margin-top: 0.46rem;
+}
+
+#query-row .copy-data {
+  top: -0.1rem;
+  right: 1.1rem;
+}
