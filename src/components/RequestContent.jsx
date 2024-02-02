@@ -63,7 +63,7 @@ const RequestBody = ({ body, copyClick, selectedRequest }) => {
       <img className="request-content-collapse actionable" src="./assets/img/arrow_icon.png" />
       <div className="collapsible">
         <CopyButton onClick={(e) => copyClick(e, JSON.stringify(body))}/>
-        <div id="request-body" style={displayLabels ? {} : {"padding-top": "1rem"}}>
+        <div id="request-body" style={displayLabels ? {} : {paddingTop: "1rem"}}>
           <input type="radio" id="pretty" name="json-display-type" value="pretty" defaultChecked />
           <BodyDisplayLabel text="pretty" onClick={(e) => setBodyIsJson(true)} display={displayLabels} />
           <input type="radio" id="raw" name="json-display-type" value="raw" />
@@ -77,6 +77,8 @@ const RequestBody = ({ body, copyClick, selectedRequest }) => {
 
 const BodyContent = ({ body, bodyIsJson }) => {
   try {
+    if (typeof body === 'object' && JSON.stringify(body) === '{}') body = '';
+    
     JSON.parse(body)
     return bodyIsJson ? (<JsonViewer value={JSON.parse(body)} />) : (<div>{body}</div>)
   } catch (e) {
