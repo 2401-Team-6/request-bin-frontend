@@ -4,7 +4,9 @@ const EndpointText = ({ endpoints, onSubmit }) => {
   const [typedEP, setTypedEP] = useState("")
 
   const handleChange = (e) => {
+    console.log(e.key)
     if (e.key === 'Enter') {
+      console.log("here")
       onSubmit(e)
     }
 

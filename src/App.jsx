@@ -93,8 +93,10 @@ function App() {
 
   // Handle an endpoint submitted through the text field
   const handleEndpointSubmit = (e) => {
+    const hashLength = 21
+    console.log(e.target.value.slice(e.target.value.length - hashLength))
     axios
-      .get(`api/endpoint/${e.target.value}`)
+      .get(`api/endpoint/${e.target.value.slice(e.target.value.length - hashLength)}`)
       .then((response) => {
         setSelectedEP(response.data);
 
