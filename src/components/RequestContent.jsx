@@ -122,8 +122,8 @@ const RequestContent = ({ selectedRequest, copyClick }) => {
         <span id="request-table-path">{selectedRequest.path}</span>
       </li>
       <Headers headers={selectedRequest.headers} copyClick={copyClick}/>
-      <RequestBody body={selectedRequest.body} copyClick={copyClick} selectedRequest={selectedRequest} />
       <Query query={selectedRequest.query} copyClick={copyClick} />
+      <RequestBody body={selectedRequest.body} copyClick={copyClick} selectedRequest={selectedRequest} />
     </ul>
   </div>
   )
