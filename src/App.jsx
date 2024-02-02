@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Sidebar from './components/Sidebar';
 import RequestContent from './components/RequestContent';
 import EndpointDropdown from './components/EndpointDropdown';
+import EndpointText from './components/EndpointText';
 import HeaderButton from './components/HeaderButton';
 import useSocket from './hooks/UseSocket';
 import axios from 'axios';
@@ -167,11 +168,15 @@ function App() {
   return (
     <>
       <header>
-        <label htmlFor='hash-select'>Endpoint:</label>
+        <label htmlFor='hash-dropdown'>Endpoint:</label>
         <EndpointDropdown
           endpoints={endpoints}
           selectedEP={selectedEP}
           setSelectedEP={setSelectedEP}
+        />
+        <EndpointText 
+          endpoints={endpoints}
+          onSubmit={handleEndpointSubmit}
         />
         <HeaderButton
           onClick={(e) => {
