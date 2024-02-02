@@ -14,10 +14,15 @@ export default function useSocket(requests, setRequests) {
 
   const connectSocket = (endpoint) => {
     if (socket) {
+      clearInterval(socket.interval);
       socket.close(); // close our old websocket
     }
 
-    let newSocket = new WebSocket(`ws:${location.host}/ws/${endpoint}`);
+    let newSocket = new WebSocket(`wss:${location.host}/ws/${endpoint}`);
+    newSocket.interval = setInterval(() => {
+      newSocket.send('ping');
+    }, 25000);
+
     newSocket.addEventListener('message', (message) => {
       newSocket.onmessage(message);
     });
