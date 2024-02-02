@@ -68,7 +68,7 @@ const Sidebar = ({ requests, handleSidebarClick, handleDeleteAll, handleDeleteRe
     partitioned[partitioned.length - 1].push(sorted[i])
   }
 
-  if (requests.length > 0 || !selectedEP.id ) {
+  if (requests.length > 0 || Object.keys(selectedEP).length === 0) {
     return (
       <div id="sidebar">
         <table id="sidebar-table">
@@ -89,7 +89,7 @@ const Sidebar = ({ requests, handleSidebarClick, handleDeleteAll, handleDeleteRe
           }
           </tbody>
         </table>
-        <DeleteAllButton onClick={handleDeleteAll}/>
+        {Object.keys(selectedEP).length > 0 && <DeleteAllButton onClick={handleDeleteAll}/>}
       </div>
     )
   } else {
