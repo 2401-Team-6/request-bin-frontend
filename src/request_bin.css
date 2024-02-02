@@ -22,20 +22,23 @@ header {
 header label {
   letter-spacing: 0.12rem;
   margin: 0 0.8rem;
+  font-weight: bold;
+  font-size: 1.5rem;
 }
 
-header input {
-  float: right;
+header input, header select {
   width: 220px;
-  margin-top: 10px;
-  margin-left: 20px;
-  margin-right: 20px;
+  margin: 0.35rem 2rem 0 2rem;
   border-radius: 0.7rem;
   border: none;
   padding: 0.3rem 0.7rem;
   background: ghostwhite;
   color: #22223B;
-  margin-right: 1rem;
+  vertical-align: bottom;
+}
+
+header select {
+  margin-left: 0rem;
 }
 
 input::-webkit-calendar-picker-indicator {
@@ -58,7 +61,7 @@ main {
   padding-top: 0.22rem;
   display: table;
   width: 40%;
-  min-height: calc(100% - 104px);
+  min-height: calc(100% + 16px);
   height: auto;
   border-right: 1px solid #9A8C98;
   background-color: #F2E9E4;
