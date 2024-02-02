@@ -174,8 +174,12 @@ function App() {
           setSelectedEP={setSelectedEP}
         />
         <HeaderButton
-          onClick={(e) =>
-            handleCopyClick(e, document.getElementById('hash-select').textContent ? document.getElementById('hash-select').textContent : "")
+          onClick={(e) => {
+             handleCopyClick(e, Object.keys(selectedEP).length > 0 ? 
+                                `https://${location.host}/log/${selectedEP.hash}`
+                                : ""
+             )
+            }
           }
           type='copy'
         />
