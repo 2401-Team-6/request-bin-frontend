@@ -43,6 +43,7 @@ input::-webkit-calendar-picker-indicator {
 }
 
 #hash-dropdown {
+  width: 480px;
   font-size: 1.2rem;
   background: ghostwhite;
   border: none;
