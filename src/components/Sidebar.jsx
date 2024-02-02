@@ -54,7 +54,7 @@ const DeleteRequestButton = ({ onClick }) => (
 
 const Sidebar = ({ requests, handleSidebarClick, handleDeleteAll, handleDeleteRequest, selectedSidebarRequest, setSelectedSidebarRequest, selectedEP }) => {
   let sorted = requests.slice()
-  sorted.sort((a, b) => a.created - b.created)
+  sorted.sort((a, b) => b.created - a.created)
 
   let partitioned = [];
   for (let i = 0; i < sorted.length; i++) {
