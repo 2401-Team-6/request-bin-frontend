@@ -167,18 +167,15 @@ function App() {
   return (
     <>
       <header>
-        <label htmlFor='hash'>https://{location.host}/log/ </label>
+        <label htmlFor='hash-select'>Endpoint:</label>
         <EndpointDropdown
           endpoints={endpoints}
           selectedEP={selectedEP}
-          onSubmit={handleEndpointSubmit}
+          setSelectedEP={setSelectedEP}
         />
         <HeaderButton
           onClick={(e) =>
-            handleCopyClick(e,
-              document.getElementById('hash-dropdown').value !== '' ? 
-                document.getElementById('hash-dropdown').value :
-                document.getElementById('hash-dropdown').getAttribute('placeholder'))
+            handleCopyClick(e, document.getElementById('hash-select').textContent ? document.getElementById('hash-select').textContent : "")
           }
           type='copy'
         />
