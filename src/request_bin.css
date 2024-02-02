@@ -61,7 +61,7 @@ main {
   padding-top: 0.22rem;
   display: table;
   width: 40%;
-  min-height: calc(100% - 104px);
+  min-height: calc(100% + 16px);
   height: auto;
   border-right: 1px solid #9A8C98;
   background-color: #F2E9E4;
