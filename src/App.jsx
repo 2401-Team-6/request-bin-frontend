@@ -1,19 +1,19 @@
-import { useState, useEffect } from 'react';
-import Sidebar from './components/Sidebar';
-import RequestContent from './components/RequestContent';
-import EndpointDropdown from './components/EndpointDropdown';
-import EndpointText from './components/EndpointText';
-import HeaderButton from './components/HeaderButton';
-import useSocket from './hooks/UseSocket';
-import axios from 'axios';
+import { useState, useEffect } from 'react'
+import Sidebar from './components/Sidebar'
+import RequestContent from './components/RequestContent'
+import EndpointDropdown from './components/EndpointDropdown'
+import EndpointText from './components/EndpointText'
+import HeaderButton from './components/HeaderButton'
+import useSocket from './hooks/UseSocket'
+import axios from 'axios'
 
 function App() {
-  const [endpoints, setEndpoints] = useState([]);
-  const [selectedEP, setSelectedEP] = useState({});
-  const [requests, setRequests] = useState([]);
-  const [selectedRequest, setSelectedRequest] = useState({});
-  const [selectedSidebarRequest, setSelectedSidebarRequest] = useState({});
-  const { connectSocket } = useSocket(requests, setRequests);
+  const [endpoints, setEndpoints] = useState([])
+  const [selectedEP, setSelectedEP] = useState({})
+  const [requests, setRequests] = useState([])
+  const [selectedRequest, setSelectedRequest] = useState({})
+  const [selectedSidebarRequest, setSelectedSidebarRequest] = useState({})
+  const { connectSocket } = useSocket(requests, setRequests)
 
   // If client has previous endpoints stored in local storage, load them
   useEffect(() => {
@@ -21,13 +21,13 @@ function App() {
       !localStorage.getItem('userEndpoints') ||
       localStorage.getItem('userEndpoints') === ''
     ) {
-      localStorage.setItem('userEndpoints', '[]');
+      localStorage.setItem('userEndpoints', '[]')
     } else {
       const endpointsInStorage = JSON.parse(
         localStorage.getItem('userEndpoints')
       );
       setEndpoints(endpointsInStorage);
-      setSelectedEP(endpointsInStorage[0] || {});
+      setSelectedEP(endpointsInStorage[0] || {})
     }
   }, []);
 
@@ -38,15 +38,15 @@ function App() {
       return;
     }
 
-    connectSocket(selectedEP.hash);
+    connectSocket(selectedEP.hash)
 
     axios
       .get(`/api/${selectedEP.hash}`) 
       .then((response) => {
-        setRequests(response.data);
+        setRequests(response.data)
       })
       .catch((err) => {
-        console.log(err.message);
+        console.log(err.message)
       });
   }, [selectedEP]);
 
@@ -65,11 +65,11 @@ function App() {
     axios
       .get(`api/${selectedEP.hash}/${sidebarRequest.id}`)
       .then((response) => {
-        const reqInfo = Object.assign({}, response.data, sidebarRequest);
-        setSelectedRequest(reqInfo);
+        const reqInfo = Object.assign({}, response.data, sidebarRequest)
+        setSelectedRequest(reqInfo)
       })
       .catch((err) => {
-        console.log(err.message);
+        console.log(err.message)
       });
   };
 
@@ -88,52 +88,10 @@ function App() {
           JSON.stringify(endpointsInStorage.concat(response.data))
         );
       })
-      .catch((err) => console.log(err.message));
+      .catch((err) => console.log(err.message))
   };
 
-  // Handle an endpoint submitted through the text field
-  const handleEndpointSubmit = (e) => {
-    const hashLength = 21
-    console.log(e.target.value.slice(e.target.value.length - hashLength))
-    axios
-      .get(`api/endpoint/${e.target.value.slice(e.target.value.length - hashLength)}`)
-      .then((response) => {
-        setSelectedEP(response.data);
-
-        if (
-          endpoints.find((endpoint) => endpoint.hash === response.data.hash)
-        ) {
-          return;
-        } else {
-          setEndpoints(endpoints.concat(response.data));
-        }
-
-        const endpointsInStorage = JSON.parse(
-          localStorage.getItem('userEndpoints')
-        );
-        if (
-          endpointsInStorage.find(
-            (endpoint) => endpoint.hash === response.data.hash
-          )
-        ) {
-          return;
-        } else {
-          localStorage.setItem(
-            'userEndpoints',
-            JSON.stringify(endpointsInStorage.concat(response.data))
-          );
-        }
-      })
-      .catch((err) => {
-        let endpointsInStorage = JSON.parse(localStorage.getItem('userEndpoints'))
-        endpointsInStorage = endpointsInStorage.filter(ep => ep.hash !== e.target.value)
-
-        localStorage.setItem('userEndpoints', JSON.stringify(endpointsInStorage))
-        setEndpoints(endpoints.filter(ep => ep.hash !== e.target.value))
-
-        console.log(err.message);
-      });
-  };
+ 
 
   // Handle copy button clicks
   const handleCopyClick = (e, text) => {
@@ -143,7 +101,7 @@ function App() {
       }
     } catch (e) { }
 
-    navigator.clipboard.writeText(text);
+    navigator.clipboard.writeText(text)
   };
 
   // Delete all requests button handler
@@ -153,7 +111,7 @@ function App() {
       .then((_response) => {
         setRequests([]);
       })
-      .catch((err) => console.log(err.message));
+      .catch((err) => console.log(err.message))
   };
 
   // Delete individual request button handler
@@ -164,21 +122,17 @@ function App() {
       .then((_response) => {
         setRequests(requests.filter((req) => req.id !== requestId))
       })
-      .catch((err) => console.log(err.message));
+      .catch((err) => console.log(err.message))
   };
 
   return (
     <>
       <header>
-        <label htmlFor='hash-dropdown'>Endpoint:</label>
+        <label htmlFor='hash-dropdown'>Endpoint URL:</label>
         <EndpointDropdown
           endpoints={endpoints}
           selectedEP={selectedEP}
           setSelectedEP={setSelectedEP}
-        />
-        <EndpointText 
-          endpoints={endpoints}
-          onSubmit={handleEndpointSubmit}
         />
         <HeaderButton
           onClick={(e) => {
@@ -193,6 +147,11 @@ function App() {
         <HeaderButton
           onClick={handleNewEndpointClick}
           type='plus'
+        />
+        <EndpointText 
+          endpoints={endpoints}
+          setEndpoints={setEndpoints}
+          setSelectedEP={setSelectedEP}
         />
       </header>
       <main>

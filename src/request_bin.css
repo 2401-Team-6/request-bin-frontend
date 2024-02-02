@@ -10,8 +10,8 @@ html,
 
 header {
   text-align: center;
-  font-size: 2rem;
-  padding: 2rem;
+  font-size: 1.5rem;
+  padding: 1.5rem;
   border-bottom: 1px solid #9A8C98;
   height: 36px;
   background: #4A4E69;
@@ -24,6 +24,11 @@ header label {
 }
 
 header input {
+  float: right;
+  width: 220px;
+  margin-top: 10px;
+  margin-left: 20px;
+  margin-right: 20px;
   border-radius: 0.7rem;
   border: none;
   padding: 0.3rem 0.7rem;
@@ -37,7 +42,9 @@ input::-webkit-calendar-picker-indicator {
 }
 
 #hash-dropdown {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
+  background: ghostwhite;
+  border: none;
 }
 
 main {
