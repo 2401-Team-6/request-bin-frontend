@@ -21,10 +21,27 @@ function App() {
       localStorage.getItem('userEndpoints') === ''
     ) {
       localStorage.setItem('userEndpoints', '[]');
+    }
+
+    const matched = location.pathname.match(/^\/read\/([0-9a-zA-Z_-]{21})/);
+
+    const endpointsInStorage = JSON.parse(
+      localStorage.getItem('userEndpoints')
+    );
+
+    if (matched) {
+      let selected = endpointsInStorage.find((ep) => ep.hash == matched[1]);
+      if (!selected) {
+        selected = { hash: matched[1] };
+        endpointsInStorage.push(selected);
+        localStorage.setItem(
+          'userEndpoints',
+          JSON.stringify(endpointsInStorage)
+        );
+      }
+      setEndpoints(endpointsInStorage);
+      setSelectedEP(selected);
     } else {
-      const endpointsInStorage = JSON.parse(
-        localStorage.getItem('userEndpoints')
-      );
       setEndpoints(endpointsInStorage);
       setSelectedEP(endpointsInStorage[0] || {});
     }
@@ -40,17 +57,19 @@ function App() {
     connectSocket(selectedEP.hash);
 
     axios
-      .get(`/api/${selectedEP.hash}`) 
+      .get(`/api/${selectedEP.hash}`)
       .then((response) => {
         setRequests(response.data);
       })
       .catch((err) => {
         console.log(err.message);
       });
+
+    history.pushState({ selectedEP }, '', `/read/${selectedEP.hash}`);
   }, [selectedEP]);
 
   useEffect(() => {
-    if (!requests.some(req => req.id === selectedRequest.id)) {
+    if (!requests.some((req) => req.id === selectedRequest.id)) {
       setSelectedRequest({});
     }
   }, [requests]);
@@ -122,11 +141,18 @@ function App() {
         }
       })
       .catch((err) => {
-        let endpointsInStorage = JSON.parse(localStorage.getItem('userEndpoints'))
-        endpointsInStorage = endpointsInStorage.filter(ep => ep.hash !== e.target.value)
+        let endpointsInStorage = JSON.parse(
+          localStorage.getItem('userEndpoints')
+        );
+        endpointsInStorage = endpointsInStorage.filter(
+          (ep) => ep.hash !== e.target.value
+        );
 
-        localStorage.setItem('userEndpoints', JSON.stringify(endpointsInStorage))
-        setEndpoints(endpoints.filter(ep => ep.hash !== e.target.value))
+        localStorage.setItem(
+          'userEndpoints',
+          JSON.stringify(endpointsInStorage)
+        );
+        setEndpoints(endpoints.filter((ep) => ep.hash !== e.target.value));
 
         console.log(err.message);
       });
@@ -135,10 +161,10 @@ function App() {
   // Handle copy button clicks
   const handleCopyClick = (e, text) => {
     try {
-      while (typeof text === "string") {
-        text = JSON.parse(text)
+      while (typeof text === 'string') {
+        text = JSON.parse(text);
       }
-    } catch (e) { }
+    } catch (e) {}
 
     navigator.clipboard.writeText(text);
   };
@@ -159,7 +185,7 @@ function App() {
     axios
       .delete(`/api/${selectedEP.hash}/${requestId}`)
       .then((_response) => {
-        setRequests(requests.filter((req) => req.id !== requestId))
+        setRequests(requests.filter((req) => req.id !== requestId));
       })
       .catch((err) => console.log(err.message));
   };
@@ -175,17 +201,18 @@ function App() {
         />
         <HeaderButton
           onClick={(e) =>
-            handleCopyClick(e,
-              document.getElementById('hash-dropdown').value !== '' ? 
-                document.getElementById('hash-dropdown').value :
-                document.getElementById('hash-dropdown').getAttribute('placeholder'))
+            handleCopyClick(
+              e,
+              document.getElementById('hash-dropdown').value !== ''
+                ? document.getElementById('hash-dropdown').value
+                : document
+                    .getElementById('hash-dropdown')
+                    .getAttribute('placeholder')
+            )
           }
           type='copy'
         />
-        <HeaderButton
-          onClick={handleNewEndpointClick}
-          type='plus'
-        />
+        <HeaderButton onClick={handleNewEndpointClick} type='plus' />
       </header>
       <main>
         <Sidebar
